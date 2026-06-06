@@ -1,0 +1,397 @@
+File: code (1).jsx
+  import { Routes, Route, Navigate } from 'react-router-dom';
+  import { useAuth } from './context/AuthContext';
+  import Layout from './components/Layout';
+  import ProtectedRoute from './components/ProtectedRoute';
+  import Login from './pages/Login';
+  import Register from './pages/Register';
+  import ForgotPassword from './pages/ForgotPassword';
+  import Dashboard from './pages/Dashboard';
+----------------------------------------
+File: code (1).txt
+  # Server
+  PORT=5000
+  JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+  # Email (SMTP) — configure for invoice emailing
+  SMTP_HOST=smtp.gmail.com
+  SMTP_PORT=587
+  SMTP_USER=your_email@gmail.com
+----------------------------------------
+File: code (10).jsx
+  import { useState } from 'react';
+  import { Link, useNavigate } from 'react-router-dom';
+  import { useAuth } from '../context/AuthContext';
+  import { Package, Eye, EyeOff } from 'lucide-react';
+  export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+----------------------------------------
+File: code (10).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate, authorize } = require('../middleware/auth');
+  const router = express.Router();
+  function logActivity(userId, userName, action, entityType, entityId, details) {
+  const db = getDB();
+----------------------------------------
+File: code (11).jsx
+  import { useState } from 'react';
+  import { Link, useNavigate } from 'react-router-dom';
+  import { useAuth } from '../context/AuthContext';
+  import { Package } from 'lucide-react';
+  export default function Register() {
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '', role: 'procurement_officer' });
+  const [error, setError] = useState('');
+----------------------------------------
+File: code (11).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate, authorize } = require('../middleware/auth');
+  const router = express.Router();
+  function logActivity(userId, userName, action, entityType, entityId, details) {
+  const db = getDB();
+----------------------------------------
+File: code (12).jsx
+  import { useState } from 'react';
+  import { Link } from 'react-router-dom';
+  import { Package, ArrowLeft } from 'lucide-react';
+  import api from '../services/api';
+  export default function ForgotPassword() {
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+----------------------------------------
+File: code (12).txt
+  const express = require('express');
+  const path = require('path');
+  const fs = require('fs');
+  const { getDB } = require('../config/database');
+  const { authenticate, authorize } = require('../middleware/auth');
+  const { generateInvoicePDF } = require('../utils/pdfGenerator');
+  const { sendInvoiceEmail } = require('../utils/emailService');
+----------------------------------------
+File: code (13).jsx
+  import { useState, useEffect } from 'react';
+  import { Link } from 'react-router-dom';
+  import { useAuth } from '../context/AuthContext';
+  import api from '../services/api';
+  import StatCard from '../components/StatCard';
+  import {
+  Users, FileText, ShieldCheck, ShoppingCart,
+  DollarSign, TrendingUp, Clock, ArrowRight
+----------------------------------------
+File: code (13).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate } = require('../middleware/auth');
+  const router = express.Router();
+  // GET /api/reports/dashboard — dashboard summary
+  router.get('/dashboard', authenticate, (req, res) => {
+----------------------------------------
+File: code (14).jsx
+  import { useState, useEffect } from 'react';
+  import api from '../services/api';
+  import DataTable from '../components/DataTable';
+  import Modal from '../components/Modal';
+  import { Plus, Search, Edit2, Trash2, Star } from 'lucide-react';
+  const emptyForm = { company_name: '', contact_person: '', email: '', phone: '', address: '', gst_number: '', category: '', status: 'active' };
+----------------------------------------
+File: code (14).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate } = require('../middleware/auth');
+  const router = express.Router();
+  // GET /api/activity-logs
+  router.get('/', authenticate, (req, res) => {
+----------------------------------------
+File: code (15).jsx
+  import { useState, useEffect } from 'react';
+  import { useAuth } from '../context/AuthContext';
+  import api from '../services/api';
+  import DataTable from '../components/DataTable';
+  import Modal from '../components/Modal';
+  import { Plus, Search, Eye, X, Send } from 'lucide-react';
+  export default function RFQCreation() {
+----------------------------------------
+File: code (15).txt
+  const PDFDocument = require('pdfkit');
+  const fs = require('fs');
+  function generateInvoicePDF(invoice, outputPath) {
+  return new Promise((resolve, reject) => {
+  const doc = new PDFDocument({ size: 'A4', margin: 50 });
+  const stream = fs.createWriteStream(outputPath);
+----------------------------------------
+File: code (16).jsx
+  import { useState, useEffect } from 'react';
+  import { useAuth } from '../context/AuthContext';
+  import { useNavigate } from 'react-router-dom';
+  import api from '../services/api';
+  import DataTable from '../components/DataTable';
+  import Modal from '../components/Modal';
+  import { Plus, Send, Eye, GitCompare } from 'lucide-react';
+----------------------------------------
+File: code (16).txt
+  const nodemailer = require('nodemailer');
+  const fs = require('fs');
+  async function sendInvoiceEmail({ to, invoiceNumber, vendorName, total, pdfPath }) {
+  const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT) || 587,
+  secure: false,
+----------------------------------------
+File: code (17).jsx
+  import { useState, useEffect } from 'react';
+  import { useParams, useNavigate } from 'react-router-dom';
+  import api from '../services/api';
+  import { ArrowLeft, Check, X, Star, Clock, DollarSign } from 'lucide-react';
+  export default function QuotationComparison() {
+  const { rfqId } = useParams();
+  const navigate = useNavigate();
+----------------------------------------
+File: code (17).txt
+  require('dotenv').config({ path: '../../.env' });
+  const bcrypt = require('bcryptjs');
+  const { initDB, getDB } = require('../config/database');
+  initDB();
+  const db = getDB();
+  console.log('Seeding database...');
+----------------------------------------
+File: code (18).jsx
+  import { useState, useEffect } from 'react';
+  import { useAuth } from '../context/AuthContext';
+  import api from '../services/api';
+  import DataTable from '../components/DataTable';
+  import Modal from '../components/Modal';
+  import { CheckCircle, XCircle, Clock } from 'lucide-react';
+  export default function ApprovalWorkflow() {
+----------------------------------------
+File: code (18).txt
+  import { defineConfig } from 'vite';
+  import react from '@vitejs/plugin-react';
+  export default defineConfig({
+  plugins: [react()],
+  server: {
+  port: 3000,
+  proxy: {
+----------------------------------------
+File: code (19).jsx
+  import { useState, useEffect } from 'react';
+  import { useAuth } from '../context/AuthContext';
+  import api from '../services/api';
+  import DataTable from '../components/DataTable';
+  import Modal from '../components/Modal';
+  import { ShoppingCart, FileText, Download, Mail, Plus, Eye } from 'lucide-react';
+  export default function PurchaseOrderInvoice() {
+----------------------------------------
+File: code (19).txt
+  /** @type {import('tailwindcss').Config} */
+  export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+  extend: {
+  fontFamily: {
+  sans: ['DM Sans', 'sans-serif'],
+  display: ['Playfair Display', 'serif']
+----------------------------------------
+File: code (2).jsx
+  import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+  import api from '../services/api';
+  const AuthContext = createContext(null);
+  export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('vb_token'));
+----------------------------------------
+File: code (2).txt
+  require('dotenv').config({ path: '../.env' });
+  const express = require('express');
+  const cors = require('cors');
+  const path = require('path');
+  const { initDB } = require('./config/database');
+  const errorHandler = require('./middleware/errorHandler');
+  const authRoutes = require('./routes/auth');
+----------------------------------------
+File: code (20).jsx
+  import { useState, useEffect } from 'react';
+  import api from '../services/api';
+  import { Activity, FileText, Users, ShoppingCart, ShieldCheck, Receipt } from 'lucide-react';
+  const entityIcons = {
+  rfq: FileText, vendor: Users, quotation: Receipt,
+  purchase_order: ShoppingCart, invoice: Receipt,
+  approval: ShieldCheck, user: Activity
+----------------------------------------
+File: code (20).txt
+  export default {
+  plugins: {
+  tailwindcss: {},
+  autoprefixer: {}
+  }
+  };
+----------------------------------------
+File: code (21).jsx
+  import { useState, useEffect } from 'react';
+  import api from '../services/api';
+  import StatCard from '../components/StatCard';
+  import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+  import { TrendingUp, DollarSign, Users, Package } from 'lucide-react';
+  const CHART_COLORS = ['#e8b847', '#3b82f6', '#22c55e', '#ef4444', '#a855f7', '#f59e0b', '#06b6d4', '#ec4899'];
+----------------------------------------
+File: code (21).txt
+  import axios from 'axios';
+  const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || '/api',
+  headers: { 'Content-Type': 'application/json' }
+  });
+  // Attach token on each request
+----------------------------------------
+File: code (22).txt
+  The app will be available at:
+  - Frontend: http://localhost:3000
+  - Backend API: http://localhost:5000/api
+  ### Test Credentials
+  | Role | Email | Password |
+  |------|-------|----------|
+----------------------------------------
+File: code (23).txt
+  ## Basic Workflow
+  1. Procurement Officer creates an RFQ with line items and assigns vendors
+  2. RFQ is published (status: open)
+  3. Vendors receive invitations and submit quotations with pricing
+  4. Procurement team compares quotations side-by-side
+  5. Approval workflow is initiated with a designated approver
+  6. Manager approves the best quotation
+----------------------------------------
+File: code (3).jsx
+  import { Navigate } from 'react-router-dom';
+  import { useAuth } from '../context/AuthContext';
+  export default function ProtectedRoute({ children, roles }) {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (!user) return <Navigate to="/login" />;
+----------------------------------------
+File: code (3).txt
+  const Database = require('better-sqlite3');
+  const path = require('path');
+  const fs = require('fs');
+  const DB_PATH = path.join(__dirname, '..', 'vendorbridge.db');
+  let db;
+----------------------------------------
+File: code (4).jsx
+  import { useState } from 'react';
+  import { Outlet } from 'react-router-dom';
+  import Sidebar from './Sidebar';
+  import Navbar from './Navbar';
+  export default function Layout() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+----------------------------------------
+File: code (4).txt
+  const jwt = require('jsonwebtoken');
+  const JWT_SECRET = process.env.JWT_SECRET || 'vendorbridge_default_secret';
+  function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  return res.status(401).json({ error: 'Authentication required' });
+----------------------------------------
+File: code (5).jsx
+  import { NavLink, useLocation } from 'react-router-dom';
+  import { useAuth } from '../context/AuthContext';
+  import {
+  LayoutDashboard, Users, FileText, MessageSquareQuote,
+  ShieldCheck, ShoppingCart, Activity, BarChart3, X, Package
+  } from 'lucide-react';
+  const navItems = [
+----------------------------------------
+File: code (5).txt
+  function errorHandler(err, req, res, next) {
+  console.error('Error:', err.message);
+  console.error(err.stack);
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(statusCode).json({
+----------------------------------------
+File: code (6).jsx
+  import { useAuth } from '../context/AuthContext';
+  import { Menu, Bell, LogOut, User } from 'lucide-react';
+  export default function Navbar({ onMenuToggle }) {
+  const { user, logout } = useAuth();
+  return (
+  <header className="h-16 bg-navy-900/80 backdrop-blur-md border-b border-navy-700/50 flex items-center px-5 gap-4">
+----------------------------------------
+File: code (6).txt
+  const express = require('express');
+  const bcrypt = require('bcryptjs');
+  const jwt = require('jsonwebtoken');
+  const { getDB } = require('../config/database');
+  const { authenticate } = require('../middleware/auth');
+  const router = express.Router();
+  const JWT_SECRET = process.env.JWT_SECRET || 'vendorbridge_default_secret';
+----------------------------------------
+File: code (7).jsx
+  export default function StatCard({ label, value, icon: Icon, color = 'gold', sub }) {
+  const colorMap = {
+  gold: 'from-gold-400/10 to-gold-600/5 border-gold-400/20 text-gold-400',
+  green: 'from-green-400/10 to-green-600/5 border-green-400/20 text-green-400',
+  blue: 'from-blue-400/10 to-blue-600/5 border-blue-400/20 text-blue-400',
+  red: 'from-red-400/10 to-red-600/5 border-red-400/20 text-red-400',
+  purple: 'from-purple-400/10 to-purple-600/5 border-purple-400/20 text-purple-400'
+  };
+----------------------------------------
+File: code (7).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate, authorize } = require('../middleware/auth');
+  const router = express.Router();
+  function logActivity(userId, userName, action, entityType, entityId, details) {
+  const db = getDB();
+----------------------------------------
+File: code (8).jsx
+  import { X } from 'lucide-react';
+  export default function Modal({ open, onClose, title, children, wide }) {
+  if (!open) return null;
+  return (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+----------------------------------------
+File: code (8).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate, authorize } = require('../middleware/auth');
+  const router = express.Router();
+  function logActivity(userId, userName, action, entityType, entityId, details) {
+  const db = getDB();
+----------------------------------------
+File: code (9).jsx
+  export default function DataTable({ columns, data, loading, emptyMessage = 'No data found' }) {
+  if (loading) {
+  return (
+  <div className="flex items-center justify-center py-16">
+  <div className="w-8 h-8 border-2 border-gold-400 border-t-transparent rounded-full animate-spin" />
+  </div>
+  );
+  }
+----------------------------------------
+File: code (9).txt
+  const express = require('express');
+  const { getDB } = require('../config/database');
+  const { authenticate, authorize } = require('../middleware/auth');
+  const router = express.Router();
+  function logActivity(userId, userName, action, entityType, entityId, details) {
+  const db = getDB();
+----------------------------------------
+File: code.jsx
+  import React from 'react';
+  import ReactDOM from 'react-dom/client';
+  import { BrowserRouter } from 'react-router-dom';
+  import { AuthProvider } from './context/AuthContext';
+  import App from './App';
+  import './index.css';
+  ReactDOM.createRoot(document.getElementById('root')).render(
+----------------------------------------
+File: code.txt
+  vendorbridge/
+  ├── README.md
+  ├── .env.example
+  ├── package.json
+  ├── server/
+  │   ├── package.json
+  │   ├── index.js
+  │   ├── config/
+----------------------------------------

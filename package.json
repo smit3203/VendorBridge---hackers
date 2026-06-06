@@ -1,0 +1,19 @@
+{
+  "name": "vendorbridge",
+  "version": "1.0.0",
+  "description": "Procurement & Vendor Management ERP",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n \"server,client\" -c \"cyan,yellow\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "seed": "cd server && node seeds/seed.js",
+    "build": "cd client && npm run build",
+    "start": "cd server && node index.js",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "setup": "npm run install:all && npm run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
