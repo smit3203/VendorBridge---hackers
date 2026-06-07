@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
@@ -7,6 +8,7 @@ import { Plus, Search, Edit2, Trash2, Star } from 'lucide-react';
 const emptyForm = { company_name: '', contact_person: '', email: '', phone: '', address: '', gst_number: '', category: '', status: 'active' };
 
 export default function VendorManagement() {
+  const location = useLocation();
   const [vendors, setVendors] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -27,6 +29,14 @@ export default function VendorManagement() {
   };
 
   useEffect(() => { fetchVendors(); }, [search, filterStatus]);
+
+  useEffect(() => {
+    if (location.state?.openCreate) {
+      setForm(emptyForm);
+      setEditId(null);
+      setShowModal(true);
+    }
+  }, [location.state]);
 
   const openCreate = () => { setForm(emptyForm); setEditId(null); setShowModal(true); };
   const openEdit = (v) => { setForm({ ...v }); setEditId(v.id); setShowModal(true); };

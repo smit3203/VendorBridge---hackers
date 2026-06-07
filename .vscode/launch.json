@@ -1,0 +1,39 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Server (Node.js)",
+            "program": "${workspaceFolder}/server/index.js",
+            "cwd": "${workspaceFolder}/server",
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "restart": true
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug Client (Chrome)",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/client",
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+                "webpack:///./*": "${workspaceFolder}/*",
+                "webpack:///*": "*"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug Full Stack",
+            "configurations": [
+                "Debug Server (Node.js)",
+                "Debug Client (Chrome)"
+            ]
+        }
+    ]
+}

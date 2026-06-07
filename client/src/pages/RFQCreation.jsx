@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLocation } from 'react-router-dom';
 import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
@@ -7,6 +8,7 @@ import { Plus, Search, Eye, X, Send } from 'lucide-react';
 
 export default function RFQCreation() {
   const { user } = useAuth();
+  const location = useLocation();
   const isVendor = user?.role === 'vendor';
   const [rfqs, setRfqs] = useState([]);
   const [vendors, setVendors] = useState([]);
@@ -33,6 +35,13 @@ export default function RFQCreation() {
   };
 
   useEffect(() => { fetchRFQs(); }, [search, filterStatus]);
+
+  useEffect(() => {
+    if (location.state?.openCreate && !isVendor) {
+      resetForm();
+      setShowModal(true);
+    }
+  }, [location.state, isVendor]);
 
   useEffect(() => {
     if (!isVendor) {

@@ -5,7 +5,8 @@ import api from '../services/api';
 import StatCard from '../components/StatCard';
 import {
   Users, FileText, ShieldCheck, ShoppingCart,
-  DollarSign, TrendingUp, Clock, ArrowRight
+  DollarSign, TrendingUp, Clock, ArrowRight,
+  Plus, UserPlus, CheckSquare, BarChart3
 } from 'lucide-react';
 
 const statusColors = {
@@ -79,6 +80,134 @@ export default function Dashboard() {
         <StatCard label="Total PO Value" value={formatCurrency(stats?.totalPOValue)} icon={DollarSign} color="gold" />
         <StatCard label="Invoices Paid" value={formatCurrency(stats?.paidInvoiceValue)} icon={TrendingUp} color="green" />
         <StatCard label="Pending Invoices" value={formatCurrency(stats?.pendingInvoiceValue)} icon={Clock} color="blue" />
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-navy-900/50 border border-navy-700/30 rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-navy-300 uppercase tracking-wider mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {user?.role === 'procurement_officer' && (
+            <>
+              <Link
+                to="/rfqs"
+                state={{ openCreate: true }}
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-gold-400/10 text-gold-400 group-hover:bg-gold-400 group-hover:text-navy-950 transition-all">
+                  <Plus className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Create RFQ</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Start new procurement</p>
+                </div>
+              </Link>
+
+              <Link
+                to="/vendors"
+                state={{ openCreate: true }}
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                  <UserPlus className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Register Vendor</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Add a new supplier</p>
+                </div>
+              </Link>
+            </>
+          )}
+
+          {user?.role === 'vendor' && (
+            <>
+              <Link
+                to="/rfqs"
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-gold-400/10 text-gold-400 group-hover:bg-gold-400 group-hover:text-navy-950 transition-all">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">View RFQs</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Check invited requests</p>
+                </div>
+              </Link>
+
+              <Link
+                to="/quotations"
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                  <Plus className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Submit Quotation</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Respond to open RFQs</p>
+                </div>
+              </Link>
+            </>
+          )}
+
+          {user?.role === 'manager' && (
+            <>
+              <Link
+                to="/approvals"
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-red-500/10 text-red-400 group-hover:bg-red-500 group-hover:text-white transition-all">
+                  <CheckSquare className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Approve Requests</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Process pending orders</p>
+                </div>
+              </Link>
+
+              <Link
+                to="/reports"
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-green-500/10 text-green-400 group-hover:bg-green-500 group-hover:text-white transition-all">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">View Analytics</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Procurement spend reports</p>
+                </div>
+              </Link>
+            </>
+          )}
+
+          {user?.role === 'admin' && (
+            <>
+              <Link
+                to="/vendors"
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Manage Vendors</p>
+                  <p className="text-xs text-navy-400 mt-0.5">Track supplier database</p>
+                </div>
+              </Link>
+
+              <Link
+                to="/reports"
+                className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-navy-800/80 to-navy-900/80 border border-navy-700/50 hover:border-gold-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+              >
+                <div className="p-2.5 rounded-lg bg-green-500/10 text-green-400 group-hover:bg-green-500 group-hover:text-white transition-all">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Procurement Reports</p>
+                  <p className="text-xs text-navy-400 mt-0.5">ERP system metrics</p>
+                </div>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Recent Sections */}
